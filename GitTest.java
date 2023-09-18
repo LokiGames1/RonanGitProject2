@@ -2,7 +2,9 @@ import static org.junit.Assert.*;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -14,6 +16,7 @@ public class GitTest {
     private static final String TEST_INPUT_FILE = "test_input.txt";
     private static final String TEST_INDEX_FOLDER = "test_index";
     private static final String TEST_OBJECTS_FOLDER = "test_objects";
+    private static final String TEST_TREE_FILE = "test_tree.txt";
 
     @BeforeAll
     static void setUpBeforeClass() throws Exception {
@@ -22,6 +25,7 @@ public class GitTest {
         Utils.deleteFile("Index.txt");
         Utils.deleteDirectory("Objects");
         Utils.deleteFile("Tree");
+        Utils.deleteFile(TEST_TREE_FILE);
 
     }
 
@@ -34,6 +38,7 @@ public class GitTest {
         Utils.deleteFile("test_input.txt");
         Utils.deleteFile("Index.txt");
         Utils.deleteDirectory("Objects");
+        Utils.deleteFile(TEST_TREE_FILE);
     }
 
     @Test
@@ -166,5 +171,40 @@ public class GitTest {
             // Clean up the test input file
             deleteTestInputFile(TEST_INPUT_FILE);
         }
+    }
+
+    @Test
+    @DisplayName("Test Tree Class: Adding, Removing Entries, and Generating Blob")
+    void testTreeClass() throws IOException, NoSuchAlgorithmException {
+        Tree tree = new Tree();
+
+        // Add entries to the tree
+        tree.add("blob : 81e0268c84067377a0a1fdfb5cc996c93f6dcf9f : file1.txt");
+        tree.add("tree : bd1ccec139dead5ee0d8c3a0499b42a7d43ac44b");
+
+        // Generate and save the tree blob
+        tree.generateBlob();
+
+        // Check if the tree blob file exists in the 'objects' folder
+        File treeBlobFile = new File("./objects/" + tree.getSha1());
+        assertTrue(treeBlobFile.exists());
+
+        // Read the contents of the tree blob file
+        List<String> blobLines = Files.readAllLines(treeBlobFile.toPath());
+
+        // Check if the blob contains the expected entries
+        assertTrue(blobLines.contains("blob : 81e0268c84067377a0a1fdfb5cc996c93f6dcf9f : file1.txt"));
+        assertTrue(blobLines.contains("tree : bd1ccec139dead5ee0d8c3a0499b42a7d43ac44b"));
+
+        // Remove an entry and generate the updated blob
+        tree.remove("blob : 81e0268c84067377a0a1fdfb5cc996c93f6dcf9f : file1.txt");
+        tree.generateBlob();
+
+        // Check if the removed entry is no longer present in the blob
+        blobLines = Files.readAllLines(treeBlobFile.toPath());
+        assertTrue(blobLines.contains("blob : 81e0268c84067377a0a1fdfb5cc996c93f6dcf9f : file1.txt"));
+
+        // Clean up the tree blob file
+        treeBlobFile.delete();
     }
 }
