@@ -6,13 +6,13 @@ import java.util.*;
 public class Index {
 
     private HashMap<String, String> files = new HashMap<>();
-    private String path = "objects";
+    private static String path = "objects";
 
     public Index() throws IOException {
         init();
     }
 
-    public void init() throws IOException {
+    public static void init() throws IOException {
         java.nio.file.Path folderPath = Paths.get(path);
         if (!Files.exists(folderPath)) {
             Files.createDirectory(folderPath);
@@ -51,5 +51,13 @@ public class Index {
         index.addBlob("test.txt");
         index.addBlob("test2.txt");
         index.removeBlob("test.txt");
+    }
+
+    public boolean containsBlob(String fileName) {
+        return files.containsKey(fileName);
+    }
+
+    public String getBlobHash(String fileName) {
+        return files.get(fileName);
     }
 }
