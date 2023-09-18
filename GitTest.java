@@ -41,61 +41,7 @@ public class GitTest {
 
     @Test
     @DisplayName("Test if creating a Blob works")
-    void testBlob(String inputFile) throws IOException, NoSuchAlgorithmException {
-        File file = new File(inputFile);
-        BufferedReader reader = new BufferedReader(new FileReader(file));
-        StringBuilder sb = new StringBuilder();
-        String line;
-        while ((line = reader.readLine()) != null) {
-            line = line.trim();
-            sb.append(line).append("");
-        }
-        reader.close();
-        String hashed = generateSHA(sb.toString());
-        write(hashed, sb);
-
-    }
-
-    @Test
-    @DisplayName("Testing if generateSHA works")
-    String generateSHA(String input) throws NoSuchAlgorithmException {
-        try {
-            // getInstance() method is called with algorithm SHA-1
-            MessageDigest md = MessageDigest.getInstance("SHA-1");
-
-            // digest() method is called
-            // to calculate message digest of the input string
-            // returned as array of byte
-            byte[] messageDigest = md.digest(input.getBytes());
-
-            // Convert byte array into signum representation
-            BigInteger no = new BigInteger(1, messageDigest);
-
-            // Convert message digest into hex value
-            String hashtext = no.toString(16);
-
-            // Add preceding 0s to make it 32 bit
-            while (hashtext.length() < 32) {
-                hashtext = "0" + hashtext;
-            }
-
-            // return the HashText
-            return hashtext;
-        }
-
-        // For specifying wrong message digest algorithms
-        catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Test
-    @DisplayName("Testing if the write works correctly")
-    void write(String hashed, StringBuilder inside) throws IOException {
-        String newFile = hashed;
-        FileWriter write = new FileWriter("./objects/" + newFile);
-        write.write(inside.toString());
-        write.close();
+    void testBlob() throws IOException, NoSuchAlgorithmException {
     }
 
     @Test

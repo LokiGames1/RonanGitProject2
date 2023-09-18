@@ -9,6 +9,9 @@ import java.security.NoSuchAlgorithmException;
 
 public class Blob {
 
+    public Blob(String string) {
+    }
+
     public static String blob(String inputFile) throws IOException, NoSuchAlgorithmException {
         File file = new File(inputFile);
         BufferedReader reader = new BufferedReader(new FileReader(file));
