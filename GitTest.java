@@ -32,4 +32,28 @@ public class GitTest {
         Utils.deleteDirectory("Objects");
         Utils.deleteFile("Tree");
     }
+
+    @Test
+    @DisplayName("Test if creating a Blob works")
+    void testBlob() throws Exception {
+
+    }
+
+    @Test
+    @DisplayName("Test if Initializing works - index and objects folders need to be created")
+    void testInit() throws Exception {
+
+    }
+
+    @Test
+    @DisplayName("Test if adding a Blob works - index gets updated and object folder adds the blob")
+    void testAdd() throws Exception {
+
+    }
+
+    @Test
+    @DisplayName("Test if removing a Blob works - index gets updated and object folder removes the blob")
+    void testRemove() throws Exception {
+
+    }
 }
